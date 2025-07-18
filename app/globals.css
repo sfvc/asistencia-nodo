@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Modo Claro */
+  --background: #f9fafb; /* Un gris claro muy sutil, casi blanco */
+  --foreground: #0d1c31; /* Un gris oscuro profundo para el texto */
+  --primary-accent: #2563eb; /* Un azul vibrante para elementos interactivos */
+  --secondary-accent: #6b7280; /* Un gris medio para texto secundario o bordes */
 }
 
 @theme inline {
@@ -14,13 +17,30 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Modo Oscuro */
+    --background: #f0fdff; /* Un gris muy oscuro, casi negro */
+    --foreground: rgb(144, 215, 238); /* Un gris claro para el texto, no blanco puro */
+    --primary-accent: #60a5fa; /* Un azul claro y suave para elementos interactivos */
+    --secondary-accent: #9ca3af; /* Un gris más claro para texto secundario o bordes */
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins);
 }
+
+p, a, small, strong, em,
+b, i, u, mark, del, ins,
+blockquote, q, cite, code,
+pre, span, label, time,
+abbr, sub, sup, kbd, samp,
+dfn, var, div > p{
+  color: lightslategray !important;
+}
+
+h1,h2,h3,h4{
+  color: #26a7fc !important;
+}
+
