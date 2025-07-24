@@ -41,6 +41,7 @@ export default function PersonalPage() {
     setPersonal((prev) => [...prev, newPersonal])
   }
 
+
   return (
 <AttendanceDashboardLayout title="Gestión de Personal">
   <div className="space-y-8">

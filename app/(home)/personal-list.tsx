@@ -19,23 +19,29 @@ import type { Personal } from "@/types/personal"
 import { getAllPersonal } from "@/services/personal"
 import { Input } from "@components/ui/input"
 
-export default function PersonalList() {
-  const [personal, setPersonal] = useState<Personal[]>([])
+interface PersonalListProps {
+  personal?: Personal[] // ahora es opcional
+}
+
+export default function PersonalList({ personal: personalProp }: PersonalListProps) {
+  const [personal, setPersonal] = useState<Personal[]>(personalProp || [])
   const [searchTerm, setSearchTerm] = useState("")
   const router = useRouter()
 
   useEffect(() => {
-    const fetchPersonal = async () => {
-      try {
-        const data = await getAllPersonal()
-        setPersonal(data)
-      } catch (error) {
-        console.error("Error fetching personal data:", error)
+    if (!personalProp) {
+      const fetchPersonal = async () => {
+        try {
+          const data = await getAllPersonal()
+          setPersonal(data)
+        } catch (error) {
+          console.error("Error fetching personal data:", error)
+        }
       }
-    }
 
-    fetchPersonal()
-  }, [])
+      fetchPersonal()
+    }
+  }, [personalProp])
 
   const getInitials = (nombre: string, apellido: string) => {
     return `${nombre.charAt(0)}${apellido.charAt(0)}`.toUpperCase()
@@ -46,9 +52,7 @@ export default function PersonalList() {
   }
 
   const filteredPersonal = personal.filter((person) =>
-    `${person.nombre} ${person.apellido}`
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+    `${person.nombre} ${person.apellido}`.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
@@ -60,14 +64,12 @@ export default function PersonalList() {
         </CardTitle>
         <CardDescription>
           {personal.length}{" "}
-          {personal.length === 1
-            ? "empleado registrado"
-            : "empleados registrados"}
+          {personal.length === 1 ? "empleado registrado" : "empleados registrados"}
         </CardDescription>
         <div className="relative mt-4">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            style={{ color: 'var(--secondary-accent)', border: '1px solid var(--foreground) !important' }}
+            style={{ color: 'var(--secondary-accent)', border: '1px solid var(--foreground)' }}
             type="text"
             placeholder="Buscar por nombre o apellido..."
             className="pl-8"
@@ -100,21 +102,15 @@ export default function PersonalList() {
                   </Avatar>
 
                   <div className="space-y-1">
-                    <h3 className="font-semibold"
-                          style={{ color: 'var(--primary-accent) !important' }}
-                    >
+                    <h3 className="font-semibold" style={{ color: 'var(--primary-accent)' }}>
                       {person.nombre} {person.apellido}
                     </h3>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1"
-                      style={{ color: 'var(--secondary-accent) !important' }}
-                      >
+                      <div className="flex items-center gap-1" style={{ color: 'var(--secondary-accent)' }}>
                         <IdCard className="h-3 w-3" />
                         DNI: {person.dni}
                       </div>
-                      <div className="flex items-center gap-1"
-                      style={{ color: 'var(--secondary-accent) !important' }}
-                      >
+                      <div className="flex items-center gap-1" style={{ color: 'var(--secondary-accent)' }}>
                         <Calendar className="h-3 w-3" />
                         {person.edad} años
                       </div>
