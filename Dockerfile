@@ -7,12 +7,14 @@ WORKDIR /app
 ARG VITE_API_URL
 
 ENV VITE_API_URL=$VITE_API_URL
+# Instalar toolchain para compilar dependencias
+RUN apk add --no-cache python3 make g++ libc6-compat
 
 # Copiar package.json y lock (y evitar reinstalar innecesario)
-COPY package*.json ./
+COPY package.json ./
 
 # Instalar dependencias
-RUN npm ci
+RUN npm i
 
 # Copiar el resto del proyecto
 COPY . .
