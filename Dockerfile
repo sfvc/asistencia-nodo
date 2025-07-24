@@ -1,35 +1,38 @@
-# Etapa de construcción
-FROM node:22-alpine AS build
+# Etapa 1: Construcción
+FROM node:18-alpine AS builder
 
-# Establecer el directorio de trabajo
+# Establecer directorio de trabajo
 WORKDIR /app
 
-
-ARG VITE_API_URL
-
-ENV VITE_API_URL=$VITE_API_URL
-
-# Copiar archivos de configuración e instalación de dependencias
-# Copiar el resto del código
+# Copiar package.json y lock (y evitar reinstalar innecesario)
 COPY package*.json ./
-RUN npm install
-RUN npm install -g typescript
+
+# Instalar dependencias
+RUN npm ci
+
+# Copiar el resto del proyecto
 COPY . .
 
-# Construir la aplicación
+# Construir la app Next.js
 RUN npm run build
 
-# Etapa de producción
-FROM nginx:alpine
+# Etapa 2: Producción
+FROM node:18-alpine AS runner
 
-# Copiar los archivos construidos desde la etapa de construcción
-COPY --from=build /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Copiar un archivo de configuración de Nginx personalizado si es necesario
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copiar sólo los archivos necesarios desde la build
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
 
-# Exponer el puerto en el que se sirve la aplicación
-EXPOSE 80
+# Establecer variables de entorno para producción
+ENV NODE_ENV=production
+ENV PORT=3000
 
-# Comando por defecto para iniciar Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Exponer el puerto
+EXPOSE 3000
+
+# Comando por defecto
+CMD ["npm", "start"]
