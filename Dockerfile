@@ -1,8 +1,12 @@
 # Etapa 1: Construcción
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 # Establecer directorio de trabajo
 WORKDIR /app
+
+ARG VITE_API_URL
+
+ENV VITE_API_URL=$VITE_API_URL
 
 # Copiar package.json y lock (y evitar reinstalar innecesario)
 COPY package*.json ./
@@ -17,7 +21,7 @@ COPY . .
 RUN npm run build
 
 # Etapa 2: Producción
-FROM node:18-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 
