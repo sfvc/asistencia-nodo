@@ -68,6 +68,6 @@ jobs:
               docker build \
                 --build-arg VITE_API_URL='${{ secrets.VITE_API_URL }}' \
                 -t municipalidad/front_asistencia_nodo:latest .
-              docker run -d --restart=always -p 0.0.0.0:3003:80 --name front_asistencia_nodo municipalidad/front_asistencia_nodo:latest
+              docker run -d --restart=always -p 0.0.0.0:3003:3000 --name front_asistencia_nodo municipalidad/front_asistencia_nodo:latest
               docker logs front_asistencia_nodo
               exit
