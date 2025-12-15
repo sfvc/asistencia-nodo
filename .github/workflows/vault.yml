@@ -28,18 +28,18 @@ jobs:
         run: |
           vault login ${{ secrets.VAULT_ROOT_TOKEN }}
 
-      - name: Read secret from Vault VARIABLES DEL PARA EL HOST (e.g., /kv/sistemas3)
+      - name: Read secret from Vault VARIABLES DEL PARA EL HOST (e.g., /kv/sistemas0)
         id: read_secret
         run: |
-          echo "::add-mask::$(vault kv get -mount=kv -field=host sistemas3)"
-          echo "::add-mask::$(vault kv get -mount=kv -field=port sistemas3)"
-          echo "::add-mask::$(vault kv get -mount=kv -field=user sistemas3)"
-          echo "::add-mask::$(vault kv get -mount=kv -field=pass sistemas3)"
+          echo "::add-mask::$(vault kv get -mount=kv -field=host sistemas0)"
+          echo "::add-mask::$(vault kv get -mount=kv -field=port sistemas0)"
+          echo "::add-mask::$(vault kv get -mount=kv -field=user sistemas0)"
+          echo "::add-mask::$(vault kv get -mount=kv -field=pass sistemas0)"
 
-          echo "host=$(vault kv get -mount=kv -field=host sistemas3)" >> $GITHUB_OUTPUT
-          echo "port=$(vault kv get -mount=kv -field=port sistemas3)" >> $GITHUB_OUTPUT
-          echo "user=$(vault kv get -mount=kv -field=user sistemas3)" >> $GITHUB_OUTPUT
-          echo "pass=$(vault kv get -mount=kv -field=pass sistemas3)" >> $GITHUB_OUTPUT
+          echo "host=$(vault kv get -mount=kv -field=host sistemas0)" >> $GITHUB_OUTPUT
+          echo "port=$(vault kv get -mount=kv -field=port sistemas0)" >> $GITHUB_OUTPUT
+          echo "user=$(vault kv get -mount=kv -field=user sistemas0)" >> $GITHUB_OUTPUT
+          echo "pass=$(vault kv get -mount=kv -field=pass sistemas0)" >> $GITHUB_OUTPUT
         
       - name: Ejecutar comandos remotos por SSH
         uses: appleboy/ssh-action@v1.0.0
